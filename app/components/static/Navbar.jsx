@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RiMenuFold3Line } from "react-icons/ri";
 import { VscChromeClose } from "react-icons/vsc";
+import { gsap } from "gsap"; // Import GSAP for animations
 
 const menuItems = [
   {
@@ -56,25 +57,42 @@ export default function Navbar() {
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      gsap.fromTo(
+        ".mobile-menu",
+        { x: "100%" },
+        { x: "0%", duration: 0.3, ease: "power2.out" }
+      );
+    } else {
+      gsap.to(".mobile-menu", { x: "100%", duration: 0.3, ease: "power2.in" });
+    }
+  }, [isMenuOpen]);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 mx-8 md:mx-20 my-4 md:mt-4 bg-white shadow-md z-50">
+    <nav className="fixed top-0 left-0 right-0  sm:mx-0 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-40 px-4 md:mt-4 bg-white shadow-md z-50">
       <div className="flex items-center justify-between">
         {/* Logo */}
-        <Image
+      <Link href="/">
+      <Image
           src="/images/iad_logo.png"
           width={1000}
           alt="iAppsData"
           height={1000}
-          className="w-52"
+          className="sm:w-full w-full md:w-52"
         />
+      </Link>
 
         {/* Hamburger Icon for Mobile */}
-        <button className="sm:hidden flex items-center space-x-2 cursor-pointer" onClick={toggleMenu}>
-          <RiMenuFold3Line />
+        <button
+          className="sm:hidden flex items-center space-x-2 cursor-pointer"
+          onClick={toggleMenu}
+        >
+          <RiMenuFold3Line size={24} />
         </button>
 
         {/* Menu for Larger Screens */}
-        <ul className="hidden sm:flex sm:space-x-8">
+        <ul className="hidden sm:flex items-center  sm:space-x-8">
           {menuItems.map((item, index) => (
             <li key={item.label} className="relative w-max text-dark cursor-pointer">
               {/* Main menu link */}
@@ -97,7 +115,7 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <button className="bg-primary text-white px-4 py-2 rounded-md">Enquire Now</button>
+            <button className="bg-primary text-white px-4 py-2 ">Enquire Now</button>
           </li>
         </ul>
       </div>
@@ -105,13 +123,12 @@ export default function Navbar() {
       {/* Mobile Menu (Curtain Type) */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-70 z-40 flex justify-end animate-[slideIn_0.3s_ease-in-out] overflow-y-auto"
-          style={{ animationFillMode: "forwards" }}
+          className="mobile-menu fixed inset-0 bg-black bg-opacity-70 z-40 flex justify-end overflow-y-auto"
         >
           <div className="w-full bg-white p-6 space-y-6 shadow-xl">
             <div className="flex justify-end">
-              <button onClick={toggleMenu} className="text-xl text-primary">
-                <VscChromeClose />
+              <button onClick={toggleMenu} className=" text-primary">
+                <VscChromeClose size={20} />
               </button>
             </div>
             <ul className="space-y-4">
@@ -137,7 +154,7 @@ export default function Navbar() {
                 </li>
               ))}
               <li>
-                <button className="w-full py-2 bg-primary text-white rounded-md">Enquire Now</button>
+                <button className="w-full py-2 bg-primary text-white ">Enquire Now</button>
               </li>
             </ul>
           </div>
