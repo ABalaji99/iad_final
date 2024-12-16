@@ -1,9 +1,10 @@
+import ServiceCarousel from '@/app/components/static/ServiceCarousel'
 import React from 'react'
 
-export default function page() {
+export default function Home() {
   return (
-    <main>
-        
+    <main className=' px-32 py-20'>
+      <ServiceCarousel/>   
     </main>
   )
 }
