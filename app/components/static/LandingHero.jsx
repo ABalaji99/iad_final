@@ -1,9 +1,23 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import ScrollButton from '@/app/reusablecomponents/ScrollButton';
-import CTA from '@/app/reusablecomponents/CTA';
+import React, { useEffect, useRef } from 'react';
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
+// Import required modules
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
+import CTA from '../(reusables)/(buttons)/CTA';
+
+gsap.registerPlugin(ScrollTrigger);
+
+// Dynamic Carousel Data
 const carouselData = [
   {
     title: 'iAppsData',
@@ -13,14 +27,14 @@ const carouselData = [
   },
   {
     title: 'Digital Transformation & Cloud Solutions',
-    description: 'Embrace the power of digital transformation and unlock new opportunities.',
+    description: 'Unlock new opportunities with digital transformation.',
     image: '/images/Digital-Transformation.png',
     link: '/services/iad.cloudsolutions',
   },
   {
     title: 'Staffing',
     description: 'Empowering businesses to lead with cutting-edge technologies.',
-    image: '/images/IT-Staffing.jpg',
+    image: '/images/Staffing-theme.png',
     link: '/services/iad.staffing',
   },
   {
@@ -38,13 +52,13 @@ const carouselData = [
   },
   {
     title: 'Sustainability & Energy Solutions',
-    description: 'Empowering businesses to lead with cutting-edge technologies.',
+    description: 'Lead with innovative sustainability and energy solutions.',
     image: '/images/Sustainability-Energy-solutions.png',
     link: '/services/iad.Sustainability-Energy-solutions',
   },
   {
     title: 'Government Solutions',
-    description: 'Empowering businesses to lead with cutting-edge technologies.',
+    description: 'Transform government operations with tailored solutions.',
     image: '/images/Government-Solutions.png',
     link: '/services/iad.government-solutions',
   },
@@ -57,116 +71,62 @@ const carouselData = [
   },
 ];
 
-const AUTO_PLAY_INTERVAL = 10000;
-const TRANSITION_DURATION = 700;
-
-const HeroCarousel = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const timeoutRef = useRef(null);
-
-  const handleNext = useCallback(() => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setActiveIndex((prevIndex) => (prevIndex + 1) % carouselData.length);
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, TRANSITION_DURATION);
-    }
-  }, [isAnimating]);
-
-  const handlePrev = useCallback(() => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setActiveIndex((prevIndex) => (prevIndex - 1 + carouselData.length) % carouselData.length);
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, TRANSITION_DURATION);
-    }
-  }, [isAnimating]);
-
-  const handleDotClick = useCallback(
-    (index) => {
-      if (index !== activeIndex && !isAnimating) {
-        setIsAnimating(true);
-        setActiveIndex(index);
-        setTimeout(() => {
-          setIsAnimating(false);
-        }, TRANSITION_DURATION);
-      }
-    },
-    [activeIndex, isAnimating]
-  );
+export default function Herosection() {
+  const slideRefs = useRef([]); // Ref to store all slides
 
   useEffect(() => {
-    timeoutRef.current = setInterval(handleNext, AUTO_PLAY_INTERVAL);
-    return () => {
-      clearInterval(timeoutRef.current);
-    };
-  }, [handleNext]);
+    // GSAP Animations on Slide Change
+    slideRefs.current.forEach((slide) => {
+      gsap.fromTo(
+        slide,
+        { opacity: 0, scale: 0.9 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: slide,
+            start: 'top 80%',
+            end: 'top 20%',
+            scrub: true,
+          },
+        }
+      );
+    });
+  }, []);
 
   return (
-    <section
-      className="relative h-[80vh] sm:h-[80vh] md:h-[90vh] lg:h-[100vh] bg-cover bg-center flex overflow-hidden"
-      style={{
-        backgroundImage: `url(${carouselData[activeIndex].image})`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        transition: `background-image ${TRANSITION_DURATION}ms ease-in-out`,
+    <Swiper
+      spaceBetween={30}
+      autoplay={{
+        delay: 3000, // Delay in milliseconds between slides
+        disableOnInteraction: false, // Keeps autoplay running after user interaction
+      }}
+     
+      pagination={{ clickable: true }}
+      modules={[Pagination, Navigation,  Autoplay]}
+      className="mySwiper h-screen px-20"
+      onSwiper={(swiper) => {
+        slideRefs.current = swiper.slides; // Save Swiper slides to refs
       }}
     >
-      {/* Content */}
-      <div className="container mx-auto flex flex-col items-center justify-center lg:items-start relative z-10 px-4 sm:px-8 md:px-12 lg:px-16">
-        <div
-          className={`w-full max-w-2xl text-left lg:text-left text-white transition-all duration-700 ease-in-out ${
-            isAnimating ? 'opacity-0 translate-y-10' : 'opacity-100 translate-y-0'
-          }`}
-        >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl text-black font-bold leading-tight mb-4">
-            {carouselData[activeIndex].title}
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg mb-6">
-            {carouselData[activeIndex].description}
-          </p>
-          <CTA link={carouselData[activeIndex].link} title="EXPLORE MORE" />
-        </div>
-      </div>
-
-      <ScrollButton link="#services" title="All Services" />
-
-      {/* Navigation Arrows */}
-      <button
-        className="absolute left-5 top-1/2 transform -translate-y-1/2 text-black  p-2  z-10 hidden sm:block"
-        onClick={handlePrev}
-        aria-label="Previous Slide"
-      >
-        <span className="text-xl">&#10094;</span>
-      </button>
-      <button
-        className="absolute right-5 top-1/2 transform -translate-y-1/2 text-black p-2  z-10 hidden sm:block"
-        onClick={handleNext}
-        aria-label="Next Slide"
-      >
-        <span className="text-xl">&#10095;</span>
-      </button>
-
-      {/* Navigation Dots (Indicators) */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 sm:space-x-4 z-10">
-        {carouselData.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleDotClick(index)}
-            className={`transition-transform duration-300 ease-out rounded-full ${
-              activeIndex === index
-                ? 'bg-white w-6 h-6 sm:w-8 sm:h-8 scale-110'
-                : 'bg-gray-400 w-4 h-4 sm:w-5 sm:h-5 opacity-50'
-            }`}
-            aria-label={`Slide ${index + 1}`}
-          />
-        ))}
-      </div>
-    </section>
+      {carouselData.map((item, index) => (
+        <SwiperSlide key={index} data-hash={`slide${index + 1}`}>
+          <div
+            className="h-full flex justify-start items-center text-left pl-10 bg-cover bg-right"
+            style={{ backgroundImage: `url(${item.image})` }}
+          >
+            <div className="bg-opacity-75 p-6 max-w-xl">
+              <h1 className="text-4xl font-bold text-gray-800 mb-4">{item.title}</h1>
+              <p className="text-gray-700 mb-4">{item.description}</p>
+              
+               <CTA title='Check our Services' link='/'/>
+           
+            </div>
+          </div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
-};
-
-export default HeroCarousel;
+}

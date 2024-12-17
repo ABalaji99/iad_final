@@ -171,7 +171,7 @@ export default function Navbar() {
   }, [openMegaMenu]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-40 px-4 md:mt-4 bg-white shadow-md z-50">
+    <nav className="fixed top-0 left-0 right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-32 px-4 md:mt-4 bg-white shadow-lg z-50">
       <div className="flex items-center justify-between">
         <Link href="/">
           <div className="logo">
