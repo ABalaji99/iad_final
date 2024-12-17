@@ -4,6 +4,7 @@ import { Poppins, Pathway_Gothic_One } from "next/font/google";
 import { useEffect, useState } from "react";
 import "./globals.css";
 import Navbar from "./components/static/Navbar";
+import Footer from "./components/static/Footer";
 
 // Configure Poppins font
 const poppins = Poppins({
@@ -34,7 +35,7 @@ function Loader() {
           display: flex;
           justify-content: center;
           align-items: center;
-          background-color: rgba(255, 255, 255, 0.8);
+          background-color: rgba(255, 255, 255);
           z-index: 9999;
         }
         .loader {
@@ -75,8 +76,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${poppins.variable} ${pathwayGothicOne.variable} bg-themeBG antialiased`}
       >
-        <Navbar/>
+        <Navbar />
         {loading ? <Loader /> : children}
+        <Footer/>
       </body>
     </html>
   );

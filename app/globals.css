@@ -1,11 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=Encode+Sans+Condensed:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Catamaran:wght@100..900&family=Encode+Sans+Condensed:wght@100;200;300;400;500;600;700;800;900&family=Pathway+Gothic+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --poppins: "Poppins", serif;;
+  --pathway:"Pathway Gothic One", sans-serif;
 }
+
+*{
+  box-sizing: border-box;
+  font-family: var(--poppins);
+}
+
+h1{
+  font-family: var(--pathway);
+}
+
+h2 , h3 , h4 , h5 , h6 , p , span , div{
+  font-family: var(--poppins);
+}
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -18,4 +42,24 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+/* Custom CSS for Hero Section */
+.mySwiper {
+  position: relative;
+  overflow: hidden;
+}
+
+.mySwiper h1 {
+  color: #000000; /* Theme Primary Color */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mySwiper p {
+  color: #404040;
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
 }

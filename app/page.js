@@ -1,4 +1,5 @@
-import Home from "./services/home/page";
+import Home from "./(pages)/home/page";
+
 
 export const metadata = {
   title: "iappsdata",
@@ -8,7 +9,7 @@ export const metadata = {
 export default function HomePage() {
   return (
     <>
-      <Home />
+    <Home/>
     </>
   );
 }
