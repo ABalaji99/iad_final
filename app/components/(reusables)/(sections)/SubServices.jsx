@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import SecHeader from "./SecHeader";
+
 import Link from "next/link";
+import SecHeader from "../(headers)/SecHeader";
 
 // The component now accepts apiData as a prop
 const Subservices = ({ apiData, head, subhead, themeimg }) => {

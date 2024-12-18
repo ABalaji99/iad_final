@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Link from "next/link";
-import SecHeader from "@/app/reusablecomponents/SecHeader";
 import Image from "next/image";
 import { FaRegFilePdf } from "react-icons/fa6";
+import SecHeader from "@/app/components/(reusables)/(headers)/SecHeader";
 import casestudies from "@/app/api/(insights)/casestudies";
 
 

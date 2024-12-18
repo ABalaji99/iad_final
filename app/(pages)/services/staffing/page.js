@@ -1,13 +1,14 @@
-import Subhero from "@/app/reusablecomponents/Subhero";
-import Subservices from "@/app/reusablecomponents/Subservices";
-import staffingservices from "@/app/api/staffingservices";
-import WhyChoose from "@/app/reusablecomponents/WhyChoose";
-import whychoosestaffing from "@/app/api/whychoosestaffing";
-import FAQ from "@/app/reusablecomponents/FAQ";
-import staffingFAQ from "@/app/api/staffingFAQ";
-import CaseStudiesPage from "@/app/(navbarpage)/insights/case-studies/page";
-import SectionalBanner from "@/app/reusablecomponents/SectionalBanner";
-import ServiceForm from "@/app/reusablecomponents/ServiceForm";
+
+import CaseStudiesPage from "../../insights/casestudies/page";
+import staffingFAQ from "@/app/api/(services)/staffing/staffingFAQ";
+import FAQ from "@/app/components/(reusables)/(sections)/FAQ";
+import Subhero from "@/app/components/(reusables)/(banner)/Subhero";
+import staffingservices from "@/app/api/(services)/staffing/staffingservices";
+import whychoosestaffing from "@/app/api/(services)/staffing/whychoosestaffing";
+import SectionalBanner from "@/app/components/(reusables)/(banner)/SectionalBanner";
+import ServiceForm from "@/app/components/(reusables)/(forms)/ServiceForm";
+import Subservices from "@/app/components/(reusables)/(sections)/SubServices";
+import WhyChoose from "@/app/components/(reusables)/(sections)/WhyChoose";
 
 const page = () => {
   return (
@@ -26,7 +27,7 @@ const page = () => {
         subhead="Explore Our Staffing Services"
         themeimg='/images/banner/cloud.png'
       />
-      <SectionalBanner backgroundImage='/images/banner/staffing-sectionalbanner.png'/>
+      <SectionalBanner backgroundImage='/images/staffing-sec-banner.png'/>
       <WhyChoose
         subhead="Why Choose iAppsData?"
         head="Your Trusted Partner in Staffing Solutions"

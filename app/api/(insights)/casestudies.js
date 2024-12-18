@@ -1,4 +1,4 @@
- export default caseStudies = [
+const casestudies = [
     // Digital Transformation & Cloud Solutions
     {
       id: 1,
@@ -324,3 +324,4 @@
     },
   ];
   
+export default casestudies;
