@@ -28,28 +28,27 @@ const menuItems = [
     megaMenu: [
       {
         label: "Digital Transformation & Cloud Solutions",
-        link: "/services/digital-transformation",
+        link: "/services/digital-transformation-cloud-solutions",
       },
       { label: "AI & Data Analytics", link: "/services/ai-data-analytics" },
       {
         label: "Sustainability & Energy Solutions",
-        link: "/services/sustainability-energy",
+        link: "/services/sustainability-energy-solutions",
       },
       {
         label: "Cybersecurity & Data Privacy",
-        link: "/services/cybersecurity",
+        link: "/services/cybersecurity-data-privacy",
       },
       { label: "Staffing", link: "/services/staffing" },
       {
         label: "Healthcare Solutions & Services",
-        link: "/services/healthcare",
+        link: "/services/healthcare-solutions-services",
       },
-      { label: "Government Solutions", link: "/services/government" },
+      { label: "Government Solutions", link: "/services/government-solutions" },
     ],
   },
   {
     label: "Industries",
-    link: "/industries",
     megaMenu: [
       { label: "Banking", link: "/industries/banking" },
       { label: "Financial Services", link: "/industries/financial-services" },
@@ -60,7 +59,6 @@ const menuItems = [
   },
   {
     label: "Insights",
-    link: "/insights",
     megaMenu: [
       { label: "Blog", link: "/insights/blog" },
       { label: "Case Studies", link: "/insights/case-studies" },
@@ -69,7 +67,6 @@ const menuItems = [
   },
   {
     label: "Careers",
-    link: "/careers",
     megaMenu: [
       { label: "Open Positions", link: "/careers/open-positions" },
       { label: "Life at Company", link: "/careers/life-at-company" },
@@ -171,14 +168,14 @@ export default function Navbar() {
   }, [openMegaMenu]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-32 px-4 md:mt-4 bg-white shadow-lg z-50">
+    <nav className="fixed top-0 left-0 right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-32 px-4 md:mt-4 lg:py-1 bg-white shadow-lg z-50">
       <div className="flex items-center justify-between">
         <Link href="/">
           <div className="logo">
             <Image
               src="/images/iad_logo.png"
-              width={150}  // Ensure logo size is fixed
-              height={50}  // Consistent height
+              width={150} // Ensure logo size is fixed
+              height={50} // Consistent height
               alt="iAppsData"
               className="sm:w-full w-full md:w-52"
             />
@@ -209,12 +206,17 @@ export default function Navbar() {
               </button>
               {item.megaMenu && openMegaMenu === index && (
                 <div
-                  className={`mega-menu-${index} absolute right-0 mt-8 bg-white shadow-xl border  z-10 p-6 grid grid-cols-1 place-items-center gap-6 min-w-max w-max`}
+                  className={`mega-menu-${index} absolute right-0 mt-8 bg-white shadow-xl  z-10 p-6 grid grid-cols-1 place-items-center gap-6 min-w-max w-max`}
                 >
                   <div className="col-span-1">
-                    <h2 className="text-lg font-medium mb text-[#252B37]">{item.label}</h2>
+                    <h2 className="text-lg font-medium mb text-[#252B37] mb-2">
+                      {item.label}
+                    </h2>
                     {item.megaMenu.map((dropdownItem) => (
-                      <div key={dropdownItem.label} className="space-y-2 ms-4 mb-2">
+                      <div
+                        key={dropdownItem.label}
+                        className="space-y-2 ms-4 mb-2"
+                      >
                         <Link
                           href={dropdownItem.link}
                           className="text-dark hover:text-primary text-normal mb-4"
@@ -229,7 +231,7 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <button className="bg-primaryDark text-white px-4 py-2 transition-transform transform hover:scale-105">
+            <button className="bg-primaryDark text-white bg-primary px-4 py-2 transition-transform transform hover:scale-105">
               Enquire Now
             </button>
           </li>

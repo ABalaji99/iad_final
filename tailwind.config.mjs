@@ -8,8 +8,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        button:'#0A77AC',
+        primary:'#0A77AC',
+        text:'#252B37',
+        subtext:'#717680',
+        textWhite:'#FAFAFA',
+        gray:'#F5F5F5',
+        textLink:'#6172F3',
+        border:'#A4A7AE',
       },
     },
   },

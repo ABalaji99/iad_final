@@ -79,6 +79,9 @@ export default function RootLayout({ children }) {
         <Navbar />
         {loading ? <Loader /> : children}
         <Footer/>
+         <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/47678342.js"></script> 
+
+
       </body>
     </html>
   );
