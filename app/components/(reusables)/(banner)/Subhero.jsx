@@ -16,7 +16,7 @@ const Subhero = ({ img, head, subhead, title, link }) => {
     <section
       className="relative  h-[100vh] bg-cover bg-bottom"
       style={{
-        backgroundImage: `linear-gradient(to left, #1C1C7066, #1C1C7066), url(${img})`,
+        backgroundImage: ` url(${img})`,
       }}
     >
       <header className="flex flex-col justify-center h-full px-8 md:px-20 text-left sm:items-center sm:text-center lg:items-start lg:text-left">

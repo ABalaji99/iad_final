@@ -17,6 +17,9 @@ export default {
         textLink:'#6172F3',
         border:'#A4A7AE',
       },
+      backgroundImage: {
+        'text-bg': "url('/images/text-bg.png')",
+      },
     },
   },
   plugins: [],

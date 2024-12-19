@@ -1,5 +1,7 @@
 'use client';
 
+
+
 import React, { useEffect, useRef } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -117,7 +119,7 @@ export default function Herosection() {
             className="h-full flex justify-start items-center text-left pl-10 bg-cover bg-right"
             style={{ backgroundImage: `url(${item.image})` }}
           >
-            <div className="bg-opacity-75 p-6 max-w-xl">
+            <div className="bg-opacity-75 p-6 max-w-xl " style={{ backgroundImage: "url('/images/text-bg.png')" }} >
               <h1 className="text-4xl font-bold text-gray-800 mb-4">{item.title}</h1>
               <p className="text-gray-700 mb-4">{item.description}</p>
               
