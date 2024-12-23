@@ -5,6 +5,11 @@ import SectionalBanner from "@/app/components/(reusables)/(banner)/SectionalBann
 import ServiceForm from "@/app/components/(reusables)/(forms)/ServiceForm";
 import Subservices from "@/app/components/(reusables)/(sections)/SubServices";
 import WhyChoose from "@/app/components/(reusables)/(sections)/WhyChoose";
+import staffingservices from "@/app/api/(services)/staffing/staffingservices";
+import whychoosestaffing from "@/app/api/(services)/staffing/whychoosestaffing";
+import staffingFAQ from "@/app/api/(services)/staffing/staffingFAQ";
+
+
 
 export const metadata = {
   title: "Staffing Services | iAppsData",
@@ -12,7 +17,7 @@ export const metadata = {
   openGraph: {
     title: "Staffing Services | iAppsData",
     description: "Explore tailored staffing solutions by iAppsData.",
-    url: "https://www.iappsdata.com/staffing",
+    url: "https://www.iappsdata.com/services/staffing",
     images: [
       { url: "/images/banner/staffing-banner.png", alt: "Staffing Banner" },
     ],
@@ -27,7 +32,7 @@ const page = () => {
         subhead="Staffing solutions designed to drive your business forward."
         link="#staffservices"
         title="Our services"
-        img="/images/banner/staffing-banner.png"
+        img="/images/banner/staffinfg-banner.png"
       />
       <Subservices
         apiData={staffingservices}

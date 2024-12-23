@@ -2,11 +2,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { RiMenuLine, RiCloseLine } from "react-icons/ri";
+
 import { gsap } from "gsap";
-import { FaCaretDown } from "react-icons/fa";
 import { GoChevronDown } from "react-icons/go";
-import { TiArrowRight } from "react-icons/ti";
 import { CgMenuRight } from "react-icons/cg";
 import { MdOutlineCloseFullscreen } from "react-icons/md";
 
@@ -168,7 +166,7 @@ export default function Navbar() {
   }, [openMegaMenu]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-32 px-4 md:mt-4 lg:py-1 bg-transparent z-50">
+    <nav className="relative  right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-32 px-4 md:mt-4 lg:py-1 bg-transparent z-50">
       <div className="flex items-center justify-between">
         <Link href="/">
           <div className="logo">

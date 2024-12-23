@@ -87,7 +87,7 @@ const CaseStudiesPage = ({ filter = "all", showFilter = true }) => {
         <div className="relative">
           <select 
             onChange={(e) => handleFilter(e.target.value)}
-            className="appearance-none px-5 py-3 border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary w-96"
+            className="appearance-none w-full px-5 py-3 border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
           >
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
@@ -103,7 +103,7 @@ const CaseStudiesPage = ({ filter = "all", showFilter = true }) => {
         <div className="relative">
           <select
             onChange={(e) => handleSort(e.target.value)}
-            className="appearance-none px-5 py-3 border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary w-96"
+            className="appearance-none px-5 py-3 border border-gray-300 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
           >
             {sortOptions.map((option) => (
               <option key={option.id} value={option.id}>
