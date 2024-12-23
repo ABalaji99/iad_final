@@ -1,12 +1,8 @@
 'use client';
 
-
-
 import React, { useEffect, useRef } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -16,8 +12,6 @@ import 'swiper/css/navigation';
 // Import required modules
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import CTA from '../(reusables)/(buttons)/CTA';
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Dynamic Carousel Data
 const carouselData = [
@@ -76,28 +70,6 @@ const carouselData = [
 export default function Herosection() {
   const slideRefs = useRef([]); // Ref to store all slides
 
-  useEffect(() => {
-    // GSAP Animations on Slide Change
-    slideRefs.current.forEach((slide) => {
-      gsap.fromTo(
-        slide,
-        { opacity: 0, scale: 0.9 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: slide,
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: true,
-          },
-        }
-      );
-    });
-  }, []);
-
   return (
     <Swiper
       spaceBetween={30}
@@ -105,9 +77,8 @@ export default function Herosection() {
         delay: 3000, // Delay in milliseconds between slides
         disableOnInteraction: false, // Keeps autoplay running after user interaction
       }}
-     
       pagination={{ clickable: true }}
-      modules={[Pagination, Navigation,  Autoplay]}
+      modules={[Pagination, Navigation, Autoplay]}
       className="mySwiper h-screen px-20"
       onSwiper={(swiper) => {
         slideRefs.current = swiper.slides; // Save Swiper slides to refs
@@ -119,12 +90,10 @@ export default function Herosection() {
             className="h-full flex justify-start items-center text-left pl-10 bg-cover bg-right"
             style={{ backgroundImage: `url(${item.image})` }}
           >
-            <div className="bg-opacity-75 p-6 max-w-xl " style={{ backgroundImage: "url('/images/text-bg.png')" }} >
+            <div className="bg-opacity-75 p-6 max-w-xl" style={{ backgroundImage: "url('/images/text-bg.png')" }}>
               <h1 className="text-4xl font-bold text-gray-800 mb-4">{item.title}</h1>
               <p className="text-gray-700 mb-4">{item.description}</p>
-              
-               <CTA title='Check our Services' link='/'/>
-           
+              <CTA title="Check our Services" link="/" />
             </div>
           </div>
         </SwiperSlide>

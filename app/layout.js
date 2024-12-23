@@ -2,6 +2,8 @@
 
 import { Poppins, Pathway_Gothic_One } from "next/font/google";
 import { useEffect, useState } from "react";
+import LocomotiveScroll from "locomotive-scroll";
+import "locomotive-scroll/dist/locomotive-scroll.css"; // Import Locomotive Scroll styles
 import "./globals.css";
 import Navbar from "./components/static/Navbar";
 import Footer from "./components/static/Footer";
@@ -63,9 +65,20 @@ export default function RootLayout({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Initialize Locomotive Scroll on page load
+    const scroll = new LocomotiveScroll({
+      el: document.querySelector("#scroll-container"), // Add a scroll container
+      smooth: true, // Enable smooth scrolling
+    });
+
     // Simulate a loading period (e.g., for data fetching or hydration)
     const timer = setTimeout(() => setLoading(false), 2000); // 2 seconds loader
-    return () => clearTimeout(timer); // Cleanup timer on unmount
+
+    // Cleanup Locomotive Scroll and timer on unmount
+    return () => {
+      clearTimeout(timer);
+      scroll.destroy(); // Clean up Locomotive Scroll instance
+    };
   }, []);
 
   return (
@@ -76,12 +89,21 @@ export default function RootLayout({ children }) {
       <body
         className={`${poppins.variable} ${pathwayGothicOne.variable} bg-themeBG antialiased`}
       >
-        <Navbar />
-        {loading ? <Loader /> : children}
-        <Footer/>
-         <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/47678342.js"></script> 
+        {/* Wrapping the page content inside a scroll container */}
+        <div id="scroll-container" data-scroll-container>
+          <Navbar />
+          {loading ? <Loader /> : children}
+          <Footer />
+        </div>
 
-
+        {/* HubSpot script for analytics */}
+        <script
+          type="text/javascript"
+          id="hs-script-loader"
+          async
+          defer
+          src="//js.hs-scripts.com/47678342.js"
+        ></script>
       </body>
     </html>
   );
