@@ -65,19 +65,30 @@ export default function RootLayout({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize Locomotive Scroll on page load
+    // Initialize Locomotive Scroll with extreme smoothness settings
     const scroll = new LocomotiveScroll({
-      el: document.querySelector("#scroll-container"), // Add a scroll container
-      smooth: true, // Enable smooth scrolling
+      el: document.querySelector("#scroll-container"),
+      smooth: true,
+      smoothMobile: true,
+      lerp: 5, // Super smooth interpolation (the lower the value, the smoother)
+      multiplier: 1.0, // Scroll multiplier to adjust the speed of the scrolling effect
+      smartphone: {
+        smooth: true,
+        lerp: 0.1, // A slight easing for mobile
+      },
+      tablet: {
+        smooth: true,
+        lerp: 0.1, // Adjust for tablet, might be smoother with different lerp value
+      },
     });
 
-    // Simulate a loading period (e.g., for data fetching or hydration)
+    // Handle loader display duration
     const timer = setTimeout(() => setLoading(false), 2000); // 2 seconds loader
 
-    // Cleanup Locomotive Scroll and timer on unmount
+    // Cleanup Locomotive Scroll instance when component unmounts
     return () => {
       clearTimeout(timer);
-      scroll.destroy(); // Clean up Locomotive Scroll instance
+      scroll.destroy();
     };
   }, []);
 
@@ -89,7 +100,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${poppins.variable} ${pathwayGothicOne.variable} bg-themeBG antialiased`}
       >
-        {/* Wrapping the page content inside a scroll container */}
+        {/* Wrapping page content inside a scroll container */}
         <div id="scroll-container" data-scroll-container>
           <Navbar />
           {loading ? <Loader /> : children}

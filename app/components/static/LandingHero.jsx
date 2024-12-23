@@ -79,7 +79,7 @@ export default function Herosection() {
       }}
       pagination={{ clickable: true }}
       modules={[Pagination, Navigation, Autoplay]}
-      className="mySwiper h-screen px-20"
+      className="mySwiper h-screen "
       onSwiper={(swiper) => {
         slideRefs.current = swiper.slides; // Save Swiper slides to refs
       }}

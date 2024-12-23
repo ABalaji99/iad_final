@@ -1,78 +1,72 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoChevronDown } from "react-icons/go";
 import { CgMenuRight } from "react-icons/cg";
 import { MdOutlineCloseFullscreen } from "react-icons/md";
+import LocomotiveScroll from "locomotive-scroll";
+import "locomotive-scroll/dist/locomotive-scroll.css";
 
 const menuItems = [
-  {
-    label: "About",
-    link: "/about",
+  { label: "About Us", link: "/about" },
+  { label: "Services", 
     megaMenu: [
-      { label: "Leadership", link: "/about/leadership" },
-      { label: "Customer Speak", link: "/about/customer-speak" },
-      { label: "Partner Ecosystem", link: "/about/partner-ecosystem" },
-      { label: "Our Mission", link: "/about/our-mission" },
-      { label: "Company Culture", link: "/about/company-culture" },
-    ],
-  },
-  {
-    label: "Services",
-    link: "/services",
-    megaMenu: [
-      {
-        label: "Digital Transformation & Cloud Solutions",
-        link: "/services/digital-transformation-cloud-solutions",
-      },
+      { label: "Digital Transformation & Cloud Solutions", link: "/services/digital-transformation-cloud-solutions" },
       { label: "AI & Data Analytics", link: "/services/ai-data-analytics" },
-      {
-        label: "Sustainability & Energy Solutions",
-        link: "/services/sustainability-energy-solutions",
-      },
-      {
-        label: "Cybersecurity & Data Privacy",
-        link: "/services/cybersecurity-data-privacy",
-      },
+      { label: "Sustainability & Energy Solutions", link: "/services/sustainability-energy-solutions" },
+      { label: "Cybersecurity & Data Privacy", link: "/services/cybersecurity-data-privacy" },
       { label: "Staffing", link: "/services/staffing" },
-      {
-        label: "Healthcare Solutions & Services",
-        link: "/services/healthcare-solutions-services",
-      },
-      { label: "Government Solutions", link: "/services/government-solutions" },
+      { label: "Healthcare Solutions & Services", link: "/services/healthcare-solutions-services" },
+      { label: "Government Solutions", link: "/services/government-solutions" },    
     ],
   },
-  {
-    label: "Industries",
-    megaMenu: [
-      { label: "Banking", link: "/industries/banking" },
-      { label: "Financial Services", link: "/industries/financial-services" },
-      { label: "Insurance", link: "/industries/insurance" },
-      { label: "Healthcare", link: "/industries/healthcare" },
-      { label: "Manufacturing", link: "/industries/manufacturing" },
-    ],
-  },
-  {
-    label: "Insights",
-    megaMenu: [
-      { label: "Blog", link: "/insights/blog" },
-      { label: "Case Studies", link: "/insights/case-studies" },
-      { label: "News", link: "/insights/news" },
-    ],
-  },
-  {
-    label: "Careers",
-    megaMenu: [
-      { label: "Open Positions", link: "/careers/open-positions" },
-      { label: "Life at Company", link: "/careers/life-at-company" },
-    ],
-  },
+  { label: "Industries", link: "/industries" },
+  { label: "Insights", link: "/insights" },
+  { label: "Careers", link: "/careers" },
 ];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMegaMenu, setOpenMegaMenu] = useState(null);
+  const [isSticky, setIsSticky] = useState(false);
+  const [navbarSize, setNavbarSize] = useState("lg");
+  const [isClient, setIsClient] = useState(false);  // To track if it's the client side
+
+  // Initialize Locomotive Scroll
+  useEffect(() => {
+    setIsClient(true);  // Set to true once mounted on the client side
+
+    const scroll = new LocomotiveScroll({
+      el: document.querySelector("[data-scroll-container]"),
+      smooth: true,
+    });
+
+    // Handle scroll events for sticky navbar and dynamic size
+    const handleScroll = () => {
+      // Check if navbar should be sticky
+      if (window.scrollY > 100) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+
+      // Handle navbar size changes
+      if (window.scrollY > 200) {
+        if (navbarSize !== "sm") setNavbarSize("sm");
+      } else {
+        if (navbarSize !== "lg") setNavbarSize("lg");
+      }
+    };
+
+    // Attach scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scroll) scroll.destroy();
+    };
+  }, [navbarSize]); // Only include `navbarSize` here to make sure it updates correctly
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -82,8 +76,17 @@ export default function Navbar() {
     setOpenMegaMenu((prev) => (prev === index ? null : index));
   };
 
+  if (!isClient) {
+    return null;  // Prevent render mismatch during SSR
+  }
+
   return (
-    <nav className="relative right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-32 px-4 md:mt-4 lg:py-1 bg-transparent z-50">
+    <nav
+      className={`relative right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-32 px-4  md:py-2 bg-white z-50 transition-transform duration-700 ease-in-out ${
+        isSticky ? "sticky top-5 shadow-md transform scale-90 md:py-1 duration-300 transition-all ease-in-out bg-white bg-opacity-80 rounded-xl" : "auto"
+      } ${navbarSize === "sm" ? "py-1" : "py-2"}`}
+      data-scroll-container
+    >
       <div className="flex items-center justify-between">
         <Link href="/">
           <div className="logo">
@@ -106,10 +109,7 @@ export default function Navbar() {
 
         <ul className="hidden sm:flex items-center sm:space-x-8">
           {menuItems.map((item, index) => (
-            <li
-              key={item.label}
-              className="relative w-max text-dark cursor-pointer"
-            >
+            <li key={item.label} className={isSticky ? "text-dark" : "text-dark"}>
               <button
                 className="hover:text-primary text-base font-medium flex items-center space-x-2"
                 onClick={() => toggleMegaMenu(index)}
@@ -117,18 +117,11 @@ export default function Navbar() {
                 {item.label}
               </button>
               {item.megaMenu && openMegaMenu === index && (
-                <div
-                  className={`mega-menu-${index} absolute right-0 mt-8 bg-white shadow-xl z-10 p-6 grid grid-cols-1 place-items-center gap-6 min-w-max w-max`}
-                >
+                <div className={`mega-menu-${index} absolute top-20 bg-white shadow-xl z-10 p-6 grid grid-cols-1 place-items-center gap-6 min-w-max w-max`}>
                   <div className="col-span-1">
-                    <h2 className="text-lg font-medium text-[#252B37] mb-2">
-                      {item.label}
-                    </h2>
+                    <h2 className="text-lg font-medium text-[#252B37] mb-2">{item.label}</h2>
                     {item.megaMenu.map((dropdownItem) => (
-                      <div
-                        key={dropdownItem.label}
-                        className="space-y-2 ms-4 mb-2"
-                      >
+                      <div key={dropdownItem.label} className="space-y-2 ms-4 mb-2">
                         <Link
                           href={dropdownItem.link}
                           className="text-dark hover:text-primary text-normal mb-4"
@@ -143,7 +136,7 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <button className="bg-primaryDark text-white px-4 py-2 transition-transform transform hover:scale-105">
+            <button className={isSticky ? "rounded-xl bg-primary text-white px-4 py-2 transition-transform transform hover:scale-105" : "bg-primary text-white px-4 py-2 transition-transform transform hover:scale-105 rounded-none"}>
               Enquire Now
             </button>
           </li>
@@ -168,9 +161,7 @@ export default function Navbar() {
                     {item.label} <GoChevronDown />
                   </button>
                   {item.megaMenu && openMegaMenu === index && (
-                    <div
-                      className={`mega-menu-${index} p-4 pt-2 space-y-2 border-l`}
-                    >
+                    <div className={`mega-menu-${index} p-4 pt-2 space-y-2 border-l`}>
                       {item.megaMenu.map((dropdownItem) => (
                         <div key={dropdownItem.label}>
                           <Link
@@ -186,7 +177,7 @@ export default function Navbar() {
                 </li>
               ))}
               <li>
-                <button className="w-full py-3 mt-10 bg-primaryDark text-white text-sm">
+                <button className={isSticky ? "rounded-xl" : "w-full py-3 mt-10 bg-blue-500 text-white text-sm rounded-none"}>
                   Enquire Now
                 </button>
               </li>
