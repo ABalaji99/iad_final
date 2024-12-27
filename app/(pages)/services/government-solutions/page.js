@@ -45,7 +45,7 @@ export default function page() {
         </div>
       </section>
 
-      <section className=" md:flex sm:block md:justify-between md:items-center  mb-40">
+      <section className=" md:flex sm:block md:justify-between md:items-center  mb-40" style={{back}}>
         <Image
           className=" w-full h-screen"
           width={100}
