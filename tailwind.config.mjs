@@ -15,6 +15,7 @@ export default {
         textWhite:'#FAFAFA',
         gray:'#F5F5F5',
         textLink:'#6172F3',
+        Darkbg:'#0A77AC',
         border:'#A4A7AE',
       },
       backgroundImage: {

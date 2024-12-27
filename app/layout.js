@@ -70,7 +70,7 @@ export default function RootLayout({ children }) {
       el: document.querySelector("#scroll-container"),
       smooth: true,
       smoothMobile: true,
-      lerp: 5, // Super smooth interpolation (the lower the value, the smoother)
+      lerp: 0.1, // Super smooth interpolation (the lower the value, the smoother)
       multiplier: 1.0, // Scroll multiplier to adjust the speed of the scrolling effect
       smartphone: {
         smooth: true,
@@ -83,7 +83,7 @@ export default function RootLayout({ children }) {
     });
 
     // Handle loader display duration
-    const timer = setTimeout(() => setLoading(false), 2000); // 2 seconds loader
+    const timer = setTimeout(() => setLoading(false), 3000); // 2 seconds loader
 
     // Cleanup Locomotive Scroll instance when component unmounts
     return () => {

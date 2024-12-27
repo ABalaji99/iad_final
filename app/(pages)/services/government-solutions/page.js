@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import React from "react";
 import CaseStudiesPage from "../../insights/casestudies/page";
@@ -11,8 +10,6 @@ import Card1 from "@/app/components/(reusables)/(cards)/Card1";
 import Industriesweserve from "@/app/components/(reusables)/(sections)/Industriesweserve";
 import WhyChoose from "@/app/components/(reusables)/(sections)/WhyChoose";
 import whyChooseData from "@/app/api/(services)/government-solutions/whyChooseData";
-
-
 
 export default function page() {
   return (
@@ -48,53 +45,40 @@ export default function page() {
         </div>
       </section>
 
-      <section className="py-16 px-4 flex flex-col gap-20 md:py-32 md:px-20 lg:flex-row items-center justify-between space-y-12 lg:space-y-0">
-        {/* Left Side - Image */}
-        <div className="w-full lg:w-1/2 h-screen mb-8 lg:mb-0">
-          <Image
-            src="/images/benefits.jpg" // Replace with your image path
-            alt="Government Solutions"
-            width={10000}
-            height={10000}
-            className="w-full h-full hover:scale-105 transition-all ease-in-out duration-500 object-cover "
-          />
-        </div>
+      <section className=" md:flex sm:block md:justify-between md:items-center  mb-40">
+        <Image
+          className=" w-full h-screen"
+          width={100}
+          height={100}
+          src="/images/gloabl.png"
+          alt="global"
+        />
 
-        {/* Right Side - Cards */}
-        <div className="w-full lg:w-1/2 ">
-          {/* Section Header */}
-
-          <SecHeader
-            subhead="Key Benefits"
-            head="Empowering Government Agencies with Proven Benefits"
-          />
-
-          {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
-            {KeyBenefits.map((benefit, index) => (
-              <div
-                key={index}
-                className="bg-white hover:scale-105 transition-all ease-in-out duration-500 p-6 shadow-lg border border-black group hover:bg-lightbg hover:border-lightbg"
-              >
-                <h3 className="text-heading font-semibold mb-4 group-hover:text-white">
-                  {benefit.title}
-                </h3>
-                <p className=" group-hover:text-white text-subText">
-                  {benefit.description}
-                </p>
-              </div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
+          {KeyBenefits.map((item, index) => (
+            <article key={index}>
+              <Image
+                src={item.img}
+                alt="global"
+                width={1000}
+                height={1000}
+                className=" w-20 h-20"
+              />
+              <h1>{item.title}</h1>
+              <p>{item.description}</p>
+            </article>
+          ))}
         </div>
       </section>
 
-    <Industriesweserve />
+      <Industriesweserve />
 
-
-      <WhyChoose subhead='Why Choose iAppsData?' head='Your Trusted Partner in Government Solutions' api={whyChooseData}/>
+      <WhyChoose
+        subhead="Why Choose iAppsData?"
+        head="Your Trusted Partner in Government Solutions"
+        api={whyChooseData}
+      />
       <CaseStudiesPage filter="government" />
-
-      
     </section>
   );
 }
