@@ -1,190 +1,225 @@
 "use client";
+import { FaCloud, FaRobot, FaLeaf, FaShieldAlt, FaUserAlt, FaStethoscope, FaFlag } from "react-icons/fa";
 import Image from "next/image";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { GoChevronDown } from "react-icons/go";
-import { CgMenuRight } from "react-icons/cg";
-import { MdOutlineCloseFullscreen } from "react-icons/md";
-import LocomotiveScroll from "locomotive-scroll";
-import "locomotive-scroll/dist/locomotive-scroll.css";
 
-const menuItems = [
-  { label: "About Us", link: "/about" },
-  { label: "Services", 
-    megaMenu: [
-      { label: "Digital Transformation & Cloud Solutions", link: "/services/digital-transformation-cloud-solutions" },
-      { label: "AI & Data Analytics", link: "/services/ai-data-analytics" },
-      { label: "Sustainability & Energy Solutions", link: "/services/sustainability-energy-solutions" },
-      { label: "Cybersecurity & Data Privacy", link: "/services/cybersecurity-data-privacy" },
-      { label: "Staffing", link: "/services/staffing" },
-      { label: "Healthcare Solutions & Services", link: "/services/healthcare-solutions-services" },
-      { label: "Government Solutions", link: "/services/government-solutions" },    
-    ],
-  },
-  { label: "Industries", link: "/industries" },
-  { label: "Insights", link: "/insights" },
-  { label: "Careers", link: "/careers" },
-];
+// Adding Intersection Observer
+const useIntersectionObserver = (callback) => {
+  const [inView, setInView] = useState(false);
 
-export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openMegaMenu, setOpenMegaMenu] = useState(null);
-  const [isSticky, setIsSticky] = useState(false);
-  const [navbarSize, setNavbarSize] = useState("lg");
-  const [isClient, setIsClient] = useState(false);  // To track if it's the client side
-
-  // Initialize Locomotive Scroll
   useEffect(() => {
-    setIsClient(true);  // Set to true once mounted on the client side
-
-    const scroll = new LocomotiveScroll({
-      el: document.querySelector("[data-scroll-container]"),
-      smooth: true,
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        callback(true);
+      } else {
+        callback(false);
+      }
     });
 
-    // Handle scroll events for sticky navbar and dynamic size
-    const handleScroll = () => {
-      // Check if navbar should be sticky
-      if (window.scrollY > 100) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
-
-      // Handle navbar size changes
-      if (window.scrollY > 200) {
-        if (navbarSize !== "sm") setNavbarSize("sm");
-      } else {
-        if (navbarSize !== "lg") setNavbarSize("lg");
-      }
-    };
-
-    // Attach scroll event listener
-    window.addEventListener("scroll", handleScroll);
+    const element = document.querySelector('.observed-image');
+    if (element) {
+      observer.observe(element);
+    }
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (scroll) scroll.destroy();
+      if (element) observer.unobserve(element);
     };
-  }, [navbarSize]); // Only include `navbarSize` here to make sure it updates correctly
+  }, [callback]);
 
-  const toggleMenu = () => {
-    setIsMenuOpen((prev) => !prev);
+  return inView;
+};
+
+const Navbar = () => {
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isImageVisible, setImageVisible] = useState(false);
+  const [isNavbarVisible, setNavbarVisible] = useState(true); // Track navbar visibility
+  const timerRef = useRef(null);
+  const lastScrollY = useRef(0);
+
+  // Hydration fix: Use effect hook to handle scroll and visibility state only on the client side
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      setIsScrolled(currentScrollY > 80);
+
+      // Hide navbar when scrolling down more than 20vh
+      if (currentScrollY > window.innerHeight * 0.8) {
+        setNavbarVisible(false);
+      } else {
+        setNavbarVisible(true);
+      }
+
+      // Show navbar again when scrolling up
+      if (currentScrollY < lastScrollY.current) {
+        setNavbarVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    // Only add event listener on the client side
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Handle hover behavior for the mega menu
+  const handleMouseEnter = (menu) => {
+    clearTimeout(timerRef.current);
+    setActiveMenu(menu);
   };
 
-  const toggleMegaMenu = (index) => {
-    setOpenMegaMenu((prev) => (prev === index ? null : index));
+  const handleMouseLeave = () => {
+    timerRef.current = setTimeout(() => {
+      setActiveMenu(null);
+    }, 200);
   };
 
-  if (!isClient) {
-    return null;  // Prevent render mismatch during SSR
-  }
+  // Image observer to apply animations when the image is in view
+  const inView = useIntersectionObserver((isInView) => setImageVisible(isInView));
+
+  // Hydration fix: Make sure state values are only initialized once on the client side
+  useEffect(() => {
+    setImageVisible(false); // Ensures image visibility isn't set during SSR
+  }, []);
 
   return (
     <nav
-      className={`relative right-0 sm:mx-0 py-2 sm:my-0 lg:mx-28 sm:px-5 sm:py-0 lg:px-4 md:mx-32 px-4  md:py-2 bg-white z-50 transition-transform duration-700 ease-in-out ${
-        isSticky ? "sticky top-5 shadow-md transform scale-90 md:py-1 duration-300 transition-all ease-in-out bg-white bg-opacity-80 rounded-xl" : "auto"
-      } ${navbarSize === "sm" ? "py-1" : "py-2"}`}
-      data-scroll-container
+      className={`fixed top-0 px-12 py-0 left-0 right-0 z-50 transition-all duration-300    ${!isNavbarVisible ? "translate-y-[-200%]" : "translate-y-0"} ${isScrolled ? "bg-gradient-to-tr from-white to-[#ffffff7b]" : "bg-white"}`}
     >
-      <div className="flex items-center justify-between">
-        <Link href="/">
-          <div className="logo">
-            <Image
-              src="/images/iad_logo.png"
-              width={150}
-              height={50}
-              alt="iAppsData"
-              className="sm:w-full w-full md:w-52"
-            />
-          </div>
-        </Link>
+      <div className={`container mx-auto flex items-center justify-between p-4 ${isScrolled ? "" : ""}`}>
+        {/* Logo */}
+        <Link href="/"><Image src="/images/iad_logo.png" priority width={200} height={200} alt="iappsdata logo" /></Link>
 
-        <button
-          className="sm:hidden flex items-center space-x-2 cursor-pointer menu-icon"
-          onClick={toggleMenu}
-        >
-          <CgMenuRight size={20} />
-        </button>
-
-        <ul className="hidden sm:flex items-center sm:space-x-8">
-          {menuItems.map((item, index) => (
-            <li key={item.label} className={isSticky ? "text-dark" : "text-dark"}>
-              <button
-                className="hover:text-primary text-base font-medium flex items-center space-x-2"
-                onClick={() => toggleMegaMenu(index)}
-              >
-                {item.label}
-              </button>
-              {item.megaMenu && openMegaMenu === index && (
-                <div className={`mega-menu-${index} absolute top-20 bg-white shadow-xl z-10 p-6 grid grid-cols-1 place-items-center gap-6 min-w-max w-max`}>
-                  <div className="col-span-1">
-                    <h2 className="text-lg font-medium text-[#252B37] mb-2">{item.label}</h2>
-                    {item.megaMenu.map((dropdownItem) => (
-                      <div key={dropdownItem.label} className="space-y-2 ms-4 mb-2">
-                        <Link
-                          href={dropdownItem.link}
-                          className="text-dark hover:text-primary text-normal mb-4"
-                        >
-                          {dropdownItem.label}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+        {/* Navigation Links */}
+        <ul className="flex space-x-8">
+          {["About", "Services", "Industries", "Insights", "Careers"].map((item, index) => (
+            <li
+              key={index}
+              onMouseEnter={() => handleMouseEnter(item)}
+              onMouseLeave={handleMouseLeave}
+              className="relative group cursor-pointer"
+            >
+              <Link href={`/${item.toLowerCase().replace(" ", "-")}`}>
+                <span className={`text-md ${isScrolled ? "text-black" : "text-black"} text-[1.02rem] font-[500] relative`}>
+                  {item}
+                  {/* Modern Border-bottom animation */}
+                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </span>
+              </Link>
             </li>
           ))}
-          <li>
-            <button className={isSticky ? "rounded-xl bg-primary text-white px-4 py-2 transition-transform transform hover:scale-105" : "bg-primary text-white px-4 py-2 transition-transform transform hover:scale-105 rounded-none"}>
-              Enquire Now
-            </button>
+          <li className="relative group cursor-pointer">
+            <Link href="/contact">
+              <span className={`text-md ${isScrolled ? "text-black" : "text-black"} text-[1rem] font-[500] relative`}>
+                Contact
+                {/* Modern Border-bottom animation */}
+                <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+              </span>
+            </Link>
           </li>
         </ul>
-      </div>
 
-      {isMenuOpen && (
-        <div className="mobile-menu fixed inset-0 bg-black bg-opacity-70 z-40 flex justify-end overflow-y-auto">
-          <div className="w-full bg-white p-6 space-y-6 shadow-xl">
-            <div className="flex justify-end">
-              <button onClick={toggleMenu} className="text-3xl text-black">
-                <MdOutlineCloseFullscreen size={20} />
-              </button>
-            </div>
-            <ul className="px-5">
-              {menuItems.map((item, index) => (
-                <li key={item.label}>
-                  <button
-                    className="text-md text-black mb-2 text-dark w-full flex justify-between items-center gap-1 text-left"
-                    onClick={() => toggleMegaMenu(index)}
-                  >
-                    {item.label} <GoChevronDown />
-                  </button>
-                  {item.megaMenu && openMegaMenu === index && (
-                    <div className={`mega-menu-${index} p-4 pt-2 space-y-2 border-l`}>
-                      {item.megaMenu.map((dropdownItem) => (
-                        <div key={dropdownItem.label}>
-                          <Link
-                            href={dropdownItem.link}
-                            className="text-dark inline-flex items-center gap-4 hover:text-primary text-sm"
-                          >
-                            {dropdownItem.label}
-                          </Link>
-                        </div>
-                      ))}
-                    </div>
+        {/* Mega Menus */}
+        {activeMenu && (
+          <div
+            onMouseEnter={() => clearTimeout(timerRef.current)}
+            onMouseLeave={handleMouseLeave}
+            className={`absolute left-0 top-full w-full bg-white text-black shadow-lg overflow-hidden transition-all duration-500 transform ${activeMenu ? "translate-y-0" : "translate-y-10"} opacity-100`}
+          >
+            <div className="grid grid-cols-3 gap-4 px-20 max-w-full w-full mx-auto overflow-auto max-h-[80vh]">
+              {/* Column 1: Info about the Tab */}
+              <div className=" border-r-2 border-[#898989] px-6">
+                <h4 className="font-semibold mb-2">{activeMenu} Overview</h4>
+                <div className="text-md">
+                  {activeMenu === "About" && (
+                    <p className="text-md">
+                      At iAppsData, we believe in empowering businesses through technology. Our company is driven by a strong commitment to innovation, integrity, and customer-centric solutions. Learn more about our mission to provide transformative services that make a difference in the digital landscape. Discover how our core values guide everything we do and the impact we have on the world.
+                    </p>
                   )}
-                </li>
-              ))}
-              <li>
-                <button className={isSticky ? "rounded-xl" : "w-full py-3 mt-10 bg-blue-500 text-white text-sm rounded-none"}>
-                  Enquire Now
-                </button>
-              </li>
-            </ul>
+
+                  {activeMenu === "Services" && (
+                    <p className="text-md">
+                      Explore the wide range of services we offer to meet your business's unique needs. From cutting-edge Digital Transformation & Cloud Solutions to robust AI & Data Analytics, we provide tailored solutions designed to drive growth and enhance efficiency. Our expert team is here to help you leverage the latest technologies to create sustainable success in a rapidly changing digital environment.
+                    </p>
+                  )}
+
+                  {activeMenu === "Industries" && (
+                    <p className="text-md">
+                      Discover the industries we serve and the comprehensive solutions we offer to help businesses navigate their most complex challenges. Whether you're in healthcare, finance, energy, or any other sector, we provide industry-specific expertise and innovative solutions that ensure you stay ahead of the curve. Our deep understanding of each industry's unique needs allows us to deliver results that truly matter.
+                    </p>
+                  )}
+
+                  {activeMenu === "Insights" && (
+                    <p className="text-md">
+                      Stay updated with the latest trends, news, and insights from our experts who are at the forefront of technology and business transformation. Our insights cover everything from emerging technologies to best practices, offering you valuable knowledge that can help you make informed decisions and stay competitive in an ever-evolving market. Let us be your trusted resource for all things digital.
+                    </p>
+                  )}
+
+                  {activeMenu === "Careers" && (
+                    <p className="text-md">
+                      Join our team and become a part of a dynamic, forward-thinking organization that values talent, creativity, and collaboration. At iAppsData, we foster a culture of growth, innovation, and continuous learning. If you're passionate about technology and looking to make an impact in a fast-paced, high-energy environment, explore the career opportunities we offer and take the next step in your professional journey.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Column 2: Service Items */}
+              <div className=" border-r-2 border-[#898989]">
+                <h4 className="font-semibold mb-2">Overview</h4>
+                <ul className="space-y-2">
+                  {activeMenu === "Services" && (
+                    <>
+                      <li><Link href="/services/digital-transformation-and-cloud-solutions">Digital Transformation & Cloud Solutions</Link></li>
+                      <li><Link href="/services/ai-and-data-analytics">AI & Data Analytics</Link></li>
+                      <li><Link href="/services/sustainability-and-energy-solutions">Sustainability & Energy Solutions</Link></li>
+                      <li><Link href="/services/cybersecurity-and-data-privacy">Cybersecurity & Data Privacy</Link></li>
+                      <li><Link href="/services/staffing">Staffing</Link></li>
+                      <li><Link href="/services/healthcare-solutions-and-services">Healthcare Solutions & Services</Link></li>
+                      <li><Link href="/services/government-solutions">Government Solutions</Link></li>
+                    </>
+                  )}
+
+                  {activeMenu === "Industries" && (
+                    <>
+                      <li><Link href="/industries/healthcare">Healthcare</Link></li>
+                      <li><Link href="/industries/financial-services">Financial Services</Link></li>
+                      <li><Link href="/industries/energy">Energy</Link></li>
+                      <li><Link href="/industries/government">Government</Link></li>
+                      <li><Link href="/industries/retail">Retail</Link></li>
+                      <li><Link href="/industries/manufacturing">Manufacturing</Link></li>
+                    </>
+                  )}
+
+                  {activeMenu === "Insights" && (
+                    <>
+                      <li><Link href="/insights/latest-news">Latest News</Link></li>
+                      <li><Link href="/insights/trends">Trends</Link></li>
+                      <li><Link href="/insights/case-studies">Case Studies</Link></li>
+                      <li><Link href="/insights/research">Research</Link></li>
+                    </>
+                  )}
+                </ul>
+              </div>
+
+              {/* Column 3: Image */}
+              <div className="py-5">
+                <Image
+                  className={`w-[400px] object-cover ${isImageVisible ? 'opacity-100 transition-opacity duration-700' : 'opacity-0'}`}
+                  src="/images/landing-image.jpg"
+                  alt="Landing Image"
+                  width={400}
+                  height={500}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </nav>
   );
-}
+};
+
+export default Navbar;

@@ -1,109 +1,80 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef } from "react";
-// Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
+import { useState, useEffect } from 'react';
+import { Globe } from '../(reusables)/(banner)/Globe';
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+const LandingHero = () => {
+  const slides = [
+    {
+      id: 1,
+      heading: "Empower Your Business",
+      description: "Innovative solutions to accelerate your digital journey.",
+      buttonText: "Learn More",
+      buttonLink: "/services",
+    },
+    {
+      id: 2,
+      heading: "Future-Ready Solutions",
+      description: "Tailored technologies for a seamless experience.",
+      buttonText: "Explore Now",
+      buttonLink: "/about",
+    },
+    {
+      id: 3,
+      heading: "Achieve Excellence",
+      description: "We help you redefine success with cutting-edge services.",
+      buttonText: "Get Started",
+      buttonLink: "/contact",
+    },
+  ];
 
-// Import required modules
-import { Pagination, Navigation, Autoplay } from "swiper/modules";
-import CTA from "../(reusables)/(buttons)/CTA";
+  const [activeSlide, setActiveSlide] = useState(0);
 
-
-// Dynamic Carousel Data
-const carouselData = [
-  {
-    title: "iAppsData",
-    description:
-      "Embrace the power of digital transformation and unlock new opportunities.",
-    image: "/images/All-2.jpg",
-    link: "/services/iad.cloudsolutions",
-  },
-  {
-    title: "Digital Transformation & Cloud Solutions",
-    description: "Unlock new opportunities with digital transformation.",
-    image: "/images/Digital-Transformation.png",
-    link: "/services/iad.cloudsolutions",
-  },
-  {
-    title: "Staffing",
-    description:
-      "Empowering businesses to lead with cutting-edge technologies.",
-    image: "/images/Staffing-theme.png",
-    link: "/services/iad.staffing",
-  },
-  {
-    title: "US Healthcare RCM Services & Solutions",
-    description:
-      "Streamline revenue cycle management with expert solutions tailored for US healthcare providers.",
-    image: "/images/healthcare-theme.png",
-    link: "/services/iad.cloudsolutions",
-  },
-  {
-    title: "AI & Data Analytics",
-    description: "Effortlessly migrate to the cloud with our expert solutions.",
-    image: "/images/ai-data-theme.png",
-    link: "/services/iad.ai-data",
-  },
-  {
-    title: "Sustainability & Energy Solutions",
-    description: "Lead with innovative sustainability and energy solutions.",
-    image: "/images/Sustainability-Energy-solutions.png",
-    link: "/services/iad.Sustainability-Energy-solutions",
-  },
-  {
-    title: "Government Solutions",
-    description: "Transform government operations with tailored solutions.",
-    image: "/images/Government-Solutions.png",
-    link: "/services/iad.government-solutions",
-  },
-  {
-    title: "Cybersecurity & Data Privacy",
-    description:
-      "Protect your business with cutting-edge cybersecurity solutions and robust data privacy measures.",
-    image: "/images/Data-security.png",
-    link: "/services/iad.cybersecurity",
-  },
-];
-
-export default function Herosection() {
-  const slideRefs = useRef([]); // Ref to store all slides
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 5000); // Change slide every 5 seconds
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   return (
-    <Swiper
-      spaceBetween={30}
-      autoplay={{
-        delay: 3000, // Delay in milliseconds between slides
-        disableOnInteraction: false, // Keeps autoplay running after user interaction
-      }}
-      pagination={{ clickable: true }}
-      modules={[Pagination, Navigation, Autoplay]}
-      className="mySwiper h-screen "
-      onSwiper={(swiper) => {
-        slideRefs.current = swiper.slides; // Save Swiper slides to refs
-      }}
-    >
-      {carouselData.map((item, index) => (
-        <SwiperSlide key={index} data-hash={`slide${index + 1}`}>
-          <div
-            className="h-full flex justify-start items-center text-left pl-10 bg-cover bg-right"
-            style={{ backgroundImage: `url(${item.image})` }}
+    <div className="relative w-full h-[750px] bg-primary md:h-[750px] bg-gray-900 text-white">
+      {/* Grid Background */}
+    
+
+      {/* Hero Content */}
+      <div className="absolute inset-0 flex items-end justify-between px-6 md:px-12 lg:px-20 ">
+        {/* Left Column */}
+        <div className="w-1/2">
+          <h1
+            key={activeSlide}
+            className="text-3xl md:text-5xl font-bold mb-4 transition-opacity duration-500 opacity-100"
           >
-            <div
-              className="bg-opacity-75 text-left p-6 max-w-xl"
-              style={{ backgroundImage: "url('/images/text-bg.png')" }}
-            >
-              <h1 className="">{item.title}</h1>
-              <p>{item.description}</p>
-              <CTA title="Check our Services" link="/" />
-            </div>
-          </div>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+            {slides[activeSlide].heading}
+          </h1>
+          <p
+            key={`desc-${activeSlide}`}
+            className="text-md md:text-lg mb-6 transition-opacity duration-500"
+          >
+            {slides[activeSlide].description}
+          </p>
+          <a
+            href={slides[activeSlide].buttonLink}
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 transition rounded text-white font-semibold"
+          >
+            {slides[activeSlide].buttonText}
+          </a>
+        </div>
+
+     
+          
+        <Globe />
+      
+      </div>
+
+     
+    </div>
   );
-}
+};
+
+export default LandingHero;

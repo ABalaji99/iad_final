@@ -1,7 +1,7 @@
 "use client";
 
 import { Poppins, Pathway_Gothic_One } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LocomotiveScroll from "locomotive-scroll";
 import "locomotive-scroll/dist/locomotive-scroll.css"; // Import Locomotive Scroll styles
 import "./globals.css";
@@ -61,6 +61,65 @@ function Loader() {
   );
 }
 
+// Cursor component with click effect
+function LazyCursor() {
+  const cursorRef = useRef(null);
+  const [isBroken, setIsBroken] = useState(false);
+
+  useEffect(() => {
+    const cursor = cursorRef.current;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    const speed = 0.1; // Adjust smoothness speed
+
+    // Track mouse movement
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    // Animate the cursor to "lag" behind the mouse position
+    const animateCursor = () => {
+      cursorX += (mouseX - cursorX) * speed;
+      cursorY += (mouseY - cursorY) * speed;
+
+      cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+      requestAnimationFrame(animateCursor);
+    };
+
+    // Handle click to toggle "broken" cursor
+    const handleClick = () => {
+      setIsBroken(true);
+      setTimeout(() => setIsBroken(false), 500); // Reset after 500ms
+    };
+
+    // Add event listeners
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("click", handleClick);
+
+    // Start animation
+    animateCursor();
+
+    // Cleanup
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={cursorRef}
+      className={`fixed top-0 left-0 w-12 h-12 pointer-events-none z-50 transform -translate-x-4 -translate-y-4 transition-transform duration-200 ${"bg-primary bg-opacity-8 border-4 border-primary opacity-80 rounded-full"}`}
+    />
+  );
+}
+
+// RootLayout component
 export default function RootLayout({ children }) {
   const [loading, setLoading] = useState(true);
 
@@ -74,16 +133,16 @@ export default function RootLayout({ children }) {
       multiplier: 1.0, // Scroll multiplier to adjust the speed of the scrolling effect
       smartphone: {
         smooth: true,
-        lerp: 0.1, // A slight easing for mobile
+        lerp: 0.1,
       },
       tablet: {
         smooth: true,
-        lerp: 0.1, // Adjust for tablet, might be smoother with different lerp value
+        lerp: 0.1,
       },
     });
 
     // Handle loader display duration
-    const timer = setTimeout(() => setLoading(false), 3000); // 2 seconds loader
+    const timer = setTimeout(() => setLoading(false), 3000); // 3 seconds loader
 
     // Cleanup Locomotive Scroll instance when component unmounts
     return () => {
@@ -100,6 +159,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${poppins.variable} ${pathwayGothicOne.variable} bg-themeBG antialiased`}
       >
+        {/* Lazy cursor */}
+        <LazyCursor />
+
         {/* Wrapping page content inside a scroll container */}
         <div id="scroll-container" data-scroll-container>
           <Navbar />
@@ -115,6 +177,9 @@ export default function RootLayout({ children }) {
           defer
           src="//js.hs-scripts.com/47678342.js"
         ></script>
+
+        <script src="https://unpkg.com/@barba/core"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
       </body>
     </html>
   );
