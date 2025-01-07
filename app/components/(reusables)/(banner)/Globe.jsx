@@ -4,8 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import createGlobe from 'cobe';
 
 const GLOBE_CONFIG = {
-  width: 1000,
-  height: 800,
+
   onRender: () => {},
   devicePixelRatio: 2,
   phi: 0,
