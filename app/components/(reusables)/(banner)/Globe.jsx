@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import createGlobe from "cobe";
 
 const GLOBE_CONFIG = {
-  width: 800,
+  width: 1000,
   height: 800,
   onRender: () => {},
   devicePixelRatio: 2,
@@ -33,8 +33,8 @@ const GLOBE_CONFIG = {
 
 export function Globe({ className, config = GLOBE_CONFIG }) {
   let phi = 0;
-  let width = 0;
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
   const pointerInteracting = useRef(null);
   const pointerInteractionMovement = useRef(0);
   const [r, setR] = useState(0);
@@ -57,24 +57,24 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
   const onRender = (state) => {
     if (!pointerInteracting.current) phi += 0.005;
     state.phi = phi + r;
-    state.width = width * 2;
-    state.height = width * 2;
+    state.width = containerRef.current.offsetWidth * 2;
+    state.height = containerRef.current.offsetHeight * 2;
   };
 
   const onResize = () => {
     if (canvasRef.current) {
-      width = canvasRef.current.offsetWidth;
+      onRender({});
     }
   };
 
   useEffect(() => {
     window.addEventListener("resize", onResize);
-    onResize();
+    onResize(); // Trigger the first resize
 
     const globe = createGlobe(canvasRef.current, {
       ...config,
-      width: width * 2,
-      height: width * 2,
+      width: containerRef.current.offsetWidth * 2,
+      height: containerRef.current.offsetHeight * 2,
       onRender,
     });
 
@@ -88,11 +88,9 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
   }, []);
 
   return (
-    <div
-    className=" w-full h-full"
-    >
+    <div ref={containerRef} className={className} style={{ width: '100%', height: '100%' }}>
       <canvas
-        className=" w-full h-full opacity-0 transition-opacity duration-500"
+        className="opacity-0 transition-opacity duration-500"
         ref={canvasRef}
         onPointerDown={(e) =>
           updatePointerInteraction(e.clientX - pointerInteractionMovement.current)

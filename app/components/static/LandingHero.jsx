@@ -38,41 +38,33 @@ const LandingHero = () => {
   }, [slides.length]);
 
   return (
-    <div className="relative w-full h-[750px] bg-primary md:h-[750px] bg-gray-900 text-white">
-      {/* Grid Background */}
-    
-
-      {/* Hero Content */}
-      <div className="absolute inset-0 flex items-end justify-between px-6 md:px-12 lg:px-20 ">
-        {/* Left Column */}
-        <div className="w-1/2">
-          <h1
-            key={activeSlide}
-            className="text-3xl md:text-5xl font-bold mb-4 transition-opacity duration-500 opacity-100"
-          >
-            {slides[activeSlide].heading}
-          </h1>
-          <p
-            key={`desc-${activeSlide}`}
-            className="text-md md:text-lg mb-6 transition-opacity duration-500"
-          >
-            {slides[activeSlide].description}
-          </p>
-          <a
-            href={slides[activeSlide].buttonLink}
-            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 transition rounded text-white font-semibold"
-          >
-            {slides[activeSlide].buttonText}
-          </a>
-        </div>
-
-     
-          
-        <Globe />
-      
+    <div className="relative flex items-center justify-between w-full h-[100vh] bg-primary text-white pt-36">
+      {/* Left Side: Text */}
+      <div className="flex-1 px-8">
+        <h1
+          key={activeSlide}
+          className="text-3xl md:text-5xl font-bold mb-4 transition-opacity duration-500 opacity-100"
+        >
+          {slides[activeSlide].heading}
+        </h1>
+        <p
+          key={`desc-${activeSlide}`}
+          className="text-md md:text-lg mb-6 transition-opacity duration-500"
+        >
+          {slides[activeSlide].description}
+        </p>
+        <a
+          href={slides[activeSlide].buttonLink}
+          className="px-6 py-3 bg-white text-black font-semibold transition"
+        >
+          {slides[activeSlide].buttonText}
+        </a>
       </div>
 
-     
+      {/* Right Side: Globe */}
+      <div className="absolute top-0 right-0 w-[100%] h-[40%] sm:w-[60%] sm:h-[60%] transition-all ease-in-out">
+        <Globe className="w-full h-full" />
+      </div>
     </div>
   );
 };
