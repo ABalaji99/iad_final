@@ -38,9 +38,9 @@ const LandingHero = () => {
   }, [slides.length]);
 
   return (
-    <div className="relative flex items-center justify-between w-full h-[100vh] bg-primary text-white pt-36">
+    <div className="relative flex items-center justify-between px-8 md:px-20 w-full h-[750px] bg-primary text-white pt-26">
       {/* Left Side: Text */}
-      <div className="flex-1 px-8">
+      <div >
         <h1
           key={activeSlide}
           className="text-3xl md:text-5xl font-bold mb-4 transition-opacity duration-500 opacity-100"
@@ -62,9 +62,9 @@ const LandingHero = () => {
       </div>
 
       {/* Right Side: Globe */}
-      <div className="absolute top-0 right-0 w-[100%] h-[40%] sm:w-[60%] sm:h-[60%] transition-all ease-in-out">
-        <Globe className="w-full h-full" />
-      </div>
+     
+        <Globe />
+     
     </div>
   );
 };

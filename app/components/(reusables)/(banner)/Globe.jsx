@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import createGlobe from "cobe";
+import { useEffect, useRef, useState } from 'react';
+import createGlobe from 'cobe';
 
 const GLOBE_CONFIG = {
   width: 1000,
@@ -42,7 +42,7 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
   const updatePointerInteraction = (value) => {
     pointerInteracting.current = value;
     if (canvasRef.current) {
-      canvasRef.current.style.cursor = value ? "grabbing" : "grab";
+      canvasRef.current.style.cursor = value ? 'grabbing' : 'grab';
     }
   };
 
@@ -68,7 +68,7 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
   };
 
   useEffect(() => {
-    window.addEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
     onResize(); // Trigger the first resize
 
     const globe = createGlobe(canvasRef.current, {
@@ -80,7 +80,7 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
 
     setTimeout(() => {
       if (canvasRef.current) {
-        canvasRef.current.style.opacity = "1";
+        canvasRef.current.style.opacity = '1';
       }
     });
 
@@ -88,7 +88,7 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
   }, []);
 
   return (
-    <div ref={containerRef} className={className} style={{ width: '100%', height: '100%' }}>
+    <div ref={containerRef} className={className}>
       <canvas
         className="opacity-0 transition-opacity duration-500"
         ref={canvasRef}
